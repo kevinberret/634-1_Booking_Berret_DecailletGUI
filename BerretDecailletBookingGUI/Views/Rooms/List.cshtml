@@ -1,0 +1,73 @@
+﻿@model IEnumerable<BerretDecailletBookingGUI.Models.Room>
+
+@{ 
+    ViewBag.Title = "Available rooms";
+    string roomTypeIcon = "";
+    string roomTypeTooltip = "";
+    string tvColorIcon = "";
+    string tvTooltip = "";
+    string hairdryerColorIcon = "";
+    string hairdryerTooltip = "";
+    int roomPos = 0;
+}
+
+@foreach (var item in Model)
+{
+    roomTypeIcon = (item.Type == 1) ? "person" : "people";
+    roomTypeTooltip = (item.Type == 1) ? "Single" : "Double";
+    tvColorIcon = ((bool)item.HasTV) ? "text-darken-3" : "text-lighten-2";
+    tvTooltip = ((bool)item.HasTV) ? "Has TV" : "No TV";
+    hairdryerColorIcon = ((bool)item.HasHairdryer) ? "text-darken-3" : "text-lighten-2";
+    hairdryerTooltip = ((bool)item.HasHairdryer) ? "Has hairdryer" : "No hairdryer";
+
+    if (roomPos % 3 == 0)
+    {
+        @Html.Raw("<div class='row'>")
+    }
+    <div class="col s4">
+        <div class="card horizontal">
+            <div class="card-image">
+                <img src="https://lorempixel.com/100/190/nature/6">
+            </div>
+            <div class="card-stacked">
+                <div class="card-content">
+                    <span class="card-title">Room n°@Html.DisplayFor(modelItem => item.Number)</span>
+                    <div class="divider"></div>
+                    <div class="section">
+                        <p>@Html.DisplayFor(modelItem => item.Description)</p>
+                    </div>
+                    <div class="row">
+                        <div class="col s4 center-align">
+                            <p><i class="tiny material-icons grey-text text-darken-3 tooltipped" data-position="top" data-delay="50" data-tooltip="@Html.Raw(roomTypeTooltip)">@Html.Raw(roomTypeIcon)</i></p>
+                        </div>
+                        <div class="col s4 center-align">
+                            <p><i class="tiny material-icons grey-text @Html.Raw(tvColorIcon) tooltipped" data-position="top" data-delay="50" data-tooltip="@Html.Raw(tvTooltip)">tv</i></p>
+                        </div>
+                        <div class="col s4 center-align">
+                            <p><i class="tiny material-icons grey-text @Html.Raw(hairdryerColorIcon) tooltipped" data-position="top" data-delay="50" data-tooltip="@Html.Raw(hairdryerTooltip)">local_offer</i></p>
+                        </div>
+                    </div>
+                    <p class="center-align"><i class="material-icons grey-text text-darken-3">attach_money</i> @Html.DisplayFor(modelItem => item.Price) CHF</p>
+                </div>
+                <div class="card-action">
+                    @Html.ActionLink("Make a reservation", "Details", new { id = item.IdRoom })
+                </div>
+            </div>
+        </div>
+    </div>
+
+    roomPos++;
+
+    if (roomPos % 3 == 0)
+    {
+        <!-- Close last row -->
+        @Html.Raw("</div>")
+    }
+}
+
+
+@if (roomPos % 3 != 0)
+{
+    <!-- Close last row -->
+    @Html.Raw("</div>")
+}

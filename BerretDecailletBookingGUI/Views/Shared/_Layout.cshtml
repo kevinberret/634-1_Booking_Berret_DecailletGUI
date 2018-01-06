@@ -4,9 +4,10 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     <title>BerretDecaillet Booking 2018</title>
-    <link href="~/Content/Site.css" rel="stylesheet" type="text/css" />
+    @RenderSection("Styles", false)    
     <link href="~/Content/materialize/css/materialize.min.css" rel="stylesheet" type="text/css" />
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="~/Content/Site.css" rel="stylesheet" type="text/css" />
     <script src="~/Scripts/modernizr-2.6.2.js"></script>
 </head>
 <body>
@@ -26,18 +27,19 @@
             </div>
         </div>
     </div>
-    -->    
-    @RenderBody()
+    -->
+    @RenderSection("topBackgroundImage", required: false)
+
     <div class="container body-content">
-        
+        @RenderBody()
     </div>
 
     <footer class="page-footer grey darken-3">
         <div class="container">
             <div class="row">
                 <div class="col l6 s12">
-                    <h5 class="white-text">Footer Content</h5>
-                    <p class="grey-text text-lighten-4">You can use rows and columns here to organize your footer content.</p>
+                    <h5 class="white-text">Module 634-1</h5>
+                    <p class="grey-text text-lighten-4">This project has been done during the 634-1 course given at HES-SO Valais/Wallis in Sierre.</p>
                 </div>
                 <div class="col l4 offset-l2 s12">
                     <h5 class="white-text">Links</h5>
@@ -53,7 +55,6 @@
         <div class="footer-copyright grey darken-4">
             <div class="container">
                 &copy; @DateTime.Now.Year BerretDecaillet Booking
-                <a class="grey-text text-lighten-4 right" href="#!">More Links</a>
             </div>
         </div>
     </footer>

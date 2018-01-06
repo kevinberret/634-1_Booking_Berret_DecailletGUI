@@ -14,8 +14,19 @@ namespace BerretDecailletBookingGUI.Controllers
     {
         private readonly string baseUri = "http://localhost:62837/api/Hotels";
 
-        // GET: Home
+        // Home page with basic search function
         public ActionResult Index()
+        {
+            return View(getLocations());
+        }
+
+        // Advanced search
+        public ActionResult Search()
+        {
+            return View(getLocations());
+        }
+
+        private List<String> getLocations()
         {
             List<Hotel> hotels;
             List<String> locations = new List<string>();
@@ -34,7 +45,7 @@ namespace BerretDecailletBookingGUI.Controllers
                 }
             }
 
-            return View(locations);
+            return locations;
         }
     }
 }

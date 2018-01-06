@@ -4,50 +4,53 @@
     
 }
 
-<div class="top-image">
-    <div class="row search">
-        <div class="col s4 offset-s7">
-            <div class="card-panel teal lighten-2">
-                <form>
-                    <div class="card-content white-text">
-                        <span class="card-title">Search</span>
-                        <p>
-                            <label class="white-text" for="checkin">Check-in</label>
-                            <input id="checkin" type="text" class="datepicker">
-                        </p>
-                        <p>
-                            <label class="white-text" for="checkout">Check-out</label>
-                            <input id="checkout" type="text" class="datepicker">
-                        </p>
-                        <p>
-                            <div class="input-field col s12">
-                                <select required class="form-control" id="location">
-                                    <option disabled selected value="">Location</option>
-                                    @foreach (String location in Model)
-                                    {
-                                        <option value="@location">@location</option>
-                                    }
-                                </select>
-                                <label class="white-text">Choose your destination</label>
-                            </div>
-                        </p>
-                    </div>
-                    <div class="card-action">
-                        <button class="btn waves-effect waves-light" type="submit" name="action">
-                            Search
-                            <i class="material-icons right">search</i>
-                        </button>
-                        <p>
-                            <a class="white-text" href="#"><i class="tiny material-icons">settings</i> Advanced search</a>
-                        </p>
-                    </div>
-                </form>
+@section topBackgroundImage{
+    <div class="top-image">
+        <div class="row search">
+            <div class="col s4 offset-s7">
+                <div class="card-panel teal lighten-2">
+                    <form>
+                        <div class="card-content white-text">
+                            <h5 class="card-title">Search</h5>
+                            <p>
+                                <label class="white-text" for="checkin">Check-in</label>
+                                <input id="checkin" type="text" class="datepicker">
+                            </p>
+                            <p>
+                                <label class="white-text" for="checkout">Check-out</label>
+                                <input id="checkout" type="text" class="datepicker">
+                            </p>
+                            <p>
+                                <div class="input-field col s12">
+                                    <select required class="form-control" id="location">
+                                        <option disabled selected value="">Location</option>
+                                        @foreach (String location in Model)
+                                        {
+                                            <option value="@location">@location</option>
+                                        }
+                                    </select>
+                                    <label class="white-text">Choose your destination</label>
+                                </div>
+                            </p>
+                        </div>
+                        <div class="card-action">
+                            <button class="btn waves-effect waves-light" type="submit" name="action">
+                                Search
+                                <i class="material-icons right">search</i>
+                            </button>
+                            <p>
+                                <a class="white-text" href="@Url.Action("Search","Home")"><i class="tiny material-icons">settings</i> Advanced search</a>
+                            </p>
+                        </div>
+                    </form>
+                </div>
+
             </div>
 
         </div>
-
     </div>
-</div>
+}
+
 
 
 
@@ -61,6 +64,21 @@
                 clear: 'Clear',
                 close: 'Ok',
                 closeOnSelect: false // Close upon selecting a date,
+            });
+
+            // snippet found https://github.com/amsul/pickadate.js/issues/690 
+            // to update automatically when datepicker is modified
+            $('.datepicker').on('change', function () {
+                if ($(this).attr('id') === 'checkin') {
+                    $('#checkout').pickadate('picker').set('min', $(this).val());
+                }
+                if ($(this).attr('id') === 'checkout') {
+                    $('#checkin').pickadate('picker').set('max', $(this).val());
+                }
+            });
+            
+            $('.datepicker').on('close', function () {
+                this.$holder.blur();
             });
         });
     </script>

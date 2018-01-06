@@ -11,13 +11,7 @@
     padding-right: 15px;
 }
 
-/* Set width on the form input elements since they're 100% wide by default */
-/*input,
-select,
-textarea {
-    max-width: 280px;
-}*/
-
+/* Backgroud image for home page */
 .top-image {
     background-image: url(img/cervin.jpg);
     background-size: cover;
@@ -25,4 +19,26 @@ textarea {
     background-position: center center;
     height: 400px;
     position: relative;
+}
+
+/* Modify default icons alignment to match text height */
+.material-icons, .icon-text {
+    vertical-align: bottom;
+}
+
+/* Modification from base library to have horizontal cards working */
+.card.horizontal {
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+}
+
+.card .card-image img {
+    height:100%;
+}
+
+/* Move the tooltip from uislider down the slider instead of top */
+.noUi-horizontal .noUi-tooltip {
+    bottom:unset;
+    top:120%;
 }
