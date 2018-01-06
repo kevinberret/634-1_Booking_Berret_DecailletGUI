@@ -1,0 +1,28 @@
+﻿body {
+    display: flex;
+    min-height: 100vh;
+    flex-direction: column;
+}
+
+/* Set padding to keep content from hitting the edges */
+.body-content {
+    flex: 1 0 auto;
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+/* Set width on the form input elements since they're 100% wide by default */
+/*input,
+select,
+textarea {
+    max-width: 280px;
+}*/
+
+.top-image {
+    background-image: url(img/cervin.jpg);
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center center;
+    height: 400px;
+    position: relative;
+}
