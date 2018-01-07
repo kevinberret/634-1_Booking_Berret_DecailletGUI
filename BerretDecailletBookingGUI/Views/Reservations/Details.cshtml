@@ -1,0 +1,75 @@
+﻿@model BerretDecailletBookingGUI.Models.Reservation
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+    
+<div>
+    <h4>Reservation</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.IdReservation)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.IdReservation)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Fisrtname)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Fisrtname)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Lastname)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Lastname)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CheckIn)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CheckIn)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CheckOut)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CheckOut)
+        </dd>
+
+    </dl>
+
+    <table>
+        <tr>
+            <th>Number</th>
+            <th>Description</th>
+            <th>Price</th>
+        </tr>
+        @foreach (var r in Model.Rooms)
+        {
+            <tr>
+                <td>@r.Number</td>
+                <td>@r.Description</td>
+                <td>@r.Price</td>
+            </tr>
+        }
+        
+    </table>
+</div>
+<p>
+    @Html.ActionLink("Back to Home", "Index", "Home") ||
+    @Html.ActionLink("Delete", "Delete", new { id = Model.IdReservation })
+</p>
