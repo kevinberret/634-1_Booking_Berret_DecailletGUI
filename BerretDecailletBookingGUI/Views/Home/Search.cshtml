@@ -1,89 +1,101 @@
-﻿
+﻿@model BerretDecailletBookingGUI.ViewModel.AdvancedSearchVM
+
 @{
     ViewBag.Title = "Index";
 
 }
     <h3>Advanced search</h3>
-    <form>
-            
-            <div class="row">
-                <div class="col s5">
-                    <h5>Hotel</h5>
-                    <div class="row">
-                        <div class="col s12 input-field">
-                            <input placeholder="Provide the hotel name you are looking for..." id="Name" type="text" class="validate">
-                            <label for="Name">Hotel name</label>
-                        </div>
-                    </div>                    
-                    <div class="row">
-                        <div class="col s12 input-field">
-                            <label for="checkin">Check-in</label>
-                            <input id="checkin" type="text" class="datepicker">
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col s12 input-field">
-                            <label for="checkout">Check-out</label>
-                            <input id="checkout" type="text" class="datepicker">
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col s12 input-field">
-                            <select required class="form-control" id="location">
-                                <option disabled selected value="">Location</option>
-                                @foreach (String location in Model)
-                                {
-                                    <option value="@location">@location</option>
-                                }
-                            </select>
-                            <label class="white-text">Choose your destination</label>
-                        </div>
+    @using (Html.BeginForm("AdvancedList", "Rooms", FormMethod.Post))
+    {
+        <div class="row">
+            <div class="col s5">
+                <h5>Hotel</h5>
+                <div class="row">
+                    <div class="col s12 input-field">
+                        @Html.TextBoxFor(m => m.Name, new { @class = "validate", @placeholder = "Provide the hotel name you are looking for..." })
+                        @Html.LabelFor(m => m.Name)
                     </div>
                 </div>
-                <div class="col s5 offset-s2">
-                    <h5>Room</h5>
-                    <div class="row">
-                        <div class="col s12">
-                            <p>Type of room</p>
-                            <p>
-                                <input type="checkbox" id="single" />
-                                <label for="single">Single</label>
-                            </p>
-                            <p>
-                                <input type="checkbox" id="double" />
-                                <label for="double">Double</label>
-                            </p>
-                        </div>
+                <div class="row">
+                    <div class="col s12 input-field">
+                        <label for="checkin">Check-in</label>
+                        @Html.TextBoxFor(m => m.CheckIn, new { @class = "datepicker" })
                     </div>
-                    <div class="row">
-                        <div class="col s12">
-                            <p>Options</p>
-                            <p>
-                                <input type="checkbox" id="wifi" />
-                                <label for="wifi">WiFi</label>
-                            </p>
-                            <p>
-                                <input type="checkbox" id="hairdryer" />
-                                <label for="hairdryer">Hairdryer</label>
-                            </p>
-                        </div>
+                </div>
+                <div class="row">
+                    <div class="col s12 input-field">
+                        <label for="checkout">Check-out</label>
+                        @Html.TextBoxFor(m => m.CheckOut, new { @class = "datepicker" })
                     </div>
-                    <div class="row">
-                        <div class="col s12">
-                            <p>Price range</p>
-                            <div id="price-slider"></div>
-                        </div>
+                </div>
+                <div class="row">
+                    <div class="col s12 input-field">
+                        @Html.DropDownListFor(m => m.Location,
+                                new SelectList(Model.Locations.AsEnumerable()))
+                        @Html.LabelFor(m => m.Location, new { htmlAttributes = new { @class = "white-text" } })
                     </div>
                 </div>
             </div>
+            <div class="col s5 offset-s2">
+                <h5>Room</h5>
+                <div class="row">
+                    <div class="col s12">
+                        <p>Type of room</p>
+                        <p>
+                            <input name="RoomType" value="1" type="radio" id="single" />
+                            <label for="single">Single</label>
+                        </p>
+                        <p>
+                            <input name="RoomType" value="2" type="radio" id="double" />
+                            <label for="double">Double</label>
+                        </p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col s12">
+                        <p>Options</p>
+                        <p>
+                            @Html.CheckBoxFor(m => m.HasWifi, htmlAttributes: new { id = "wifi" })
+                            @Html.HiddenFor(m => m.HasWifi)
+                            @Html.Label("wifi", "WiFi")
+                        </p>
+                        <p>
+                            @Html.CheckBoxFor(m => m.HasParking, htmlAttributes: new { id = "parking" })
+                            @Html.HiddenFor(m => m.HasParking)
+                            @Html.Label("parking", "Parking")
+                        </p>
+                        <p>
+                            @Html.CheckBoxFor(m => m.HasTV, htmlAttributes: new { id = "tv" })
+                            @Html.HiddenFor(m => m.HasTV)
+                            @Html.Label("tv", "TV")
+                        </p>
+                        <p>
+                            @Html.CheckBoxFor(m => m.HasHairdryer, htmlAttributes: new { id = "hairdryer" })
+                            @Html.HiddenFor(m => m.HasHairdryer)
+                            @Html.Label("hairdryer", "Hairdryer")
+                        </p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col s12">
+                        <p>Price range</p>
+                        <div id="price-slider"></div>
+                        @Html.HiddenFor(m => m.PriceMin)
+                        @Html.HiddenFor(m => m.PriceMax)
+                    </div>
+                </div>
+            </div>
+        </div>
             <div class="row">
                 <button class="col s12 btn waves-effect waves-light" type="submit" name="action">
                     Search
                     <i class="material-icons right">search</i>
                 </button>
             </div>
+    }
+
             
-    </form>
+            
 
 
 @section Styles{
@@ -95,9 +107,13 @@
     <script src="~/Scripts/nouislider/nouislider.min.js"></script>
     <script>
         $(document).ready(function () {
+            var date = new Date();
+
             $('select').material_select();
 
             $('.datepicker').pickadate({
+                min: new Date(date.getFullYear(), date.getMonth(), date.getDate()),
+                max: new Date(date.getFullYear(), date.getMonth() + 6, date.getDate()),
                 today: 'Today',
                 clear: 'Clear',
                 close: 'Ok',
@@ -107,11 +123,11 @@
             // snippet found https://github.com/amsul/pickadate.js/issues/690 
             // to update automatically when datepicker is modified
             $('.datepicker').on('change', function () {
-                if ($(this).attr('id') === 'checkin') {
-                    $('#checkout').pickadate('picker').set('min', $(this).val());
+                if ($(this).attr('id') === 'CheckIn') {
+                    $('#CheckOut').pickadate('picker').set('min', $(this).val());
                 }
-                if ($(this).attr('id') === 'checkout') {
-                    $('#checkin').pickadate('picker').set('max', $(this).val());
+                if ($(this).attr('id') === 'CheckOut') {
+                    $('#CheckIn').pickadate('picker').set('max', $(this).val());
                 }
             });
 
@@ -126,6 +142,20 @@
                     'min': 0,
                     'max': 3000
                 }
+            });
+
+            // modify hidden input for min price and max price
+            slider.noUiSlider.on('end', function () {
+                var values = slider.noUiSlider.get();
+                var min = values[0];
+                var max = values[1];
+                $('#PriceMin').val(min);
+                $('#PriceMax').val(max);
+            });
+
+            // workaround for checkbox in materialize
+            $("input[type='hidden']").each(function (index, element) {
+                $(this).appendTo($(element).parent());
             });
         });
     </script>

@@ -9,20 +9,21 @@
         <div class="row search">
             <div class="col s4 offset-s7">
                 <div class="card-panel teal lighten-2">
-                    <form>
+                    @using (Html.BeginForm("List", "Rooms", FormMethod.Post))
+                    {
                         <div class="card-content white-text">
                             <h5 class="card-title">Search</h5>
                             <p>
                                 <label class="white-text" for="checkin">Check-in</label>
-                                <input id="checkin" type="text" class="datepicker">
+                                @Html.Editor("CheckIn", new { htmlAttributes = new { @class = "datepicker" } })
                             </p>
                             <p>
                                 <label class="white-text" for="checkout">Check-out</label>
-                                <input id="checkout" type="text" class="datepicker">
+                                @Html.Editor("CheckOut", new { htmlAttributes = new { @class = "datepicker" } })
                             </p>
                             <p>
                                 <div class="input-field col s12">
-                                    <select required class="form-control" id="location">
+                                    <select required class="form-control" id="Location" name="Location">
                                         <option disabled selected value="">Location</option>
                                         @foreach (String location in Model)
                                         {
@@ -42,7 +43,7 @@
                                 <a class="white-text" href="@Url.Action("Search","Home")"><i class="tiny material-icons">settings</i> Advanced search</a>
                             </p>
                         </div>
-                    </form>
+                    }
                 </div>
 
             </div>
@@ -57,9 +58,13 @@
 @section scripts{
     <script>
         $(document).ready(function () {
+            var date = new Date();
+
             $('select').material_select();
 
             $('.datepicker').pickadate({
+                min: new Date(date.getFullYear(), date.getMonth(), date.getDate()),
+                max: new Date(date.getFullYear(), date.getMonth() + 6, date.getDate()),
                 today: 'Today',
                 clear: 'Clear',
                 close: 'Ok',
@@ -69,16 +74,12 @@
             // snippet found https://github.com/amsul/pickadate.js/issues/690 
             // to update automatically when datepicker is modified
             $('.datepicker').on('change', function () {
-                if ($(this).attr('id') === 'checkin') {
-                    $('#checkout').pickadate('picker').set('min', $(this).val());
+                if ($(this).attr('id') === 'CheckIn') {
+                    $('#CheckOut').pickadate('picker').set('min', $(this).val());
                 }
-                if ($(this).attr('id') === 'checkout') {
-                    $('#checkin').pickadate('picker').set('max', $(this).val());
+                if ($(this).attr('id') === 'CheckOut') {
+                    $('#CheckIn').pickadate('picker').set('max', $(this).val());
                 }
-            });
-            
-            $('.datepicker').on('close', function () {
-                this.$holder.blur();
             });
         });
     </script>
