@@ -20,7 +20,15 @@ namespace BerretDecailletBookingGUI.Controllers
         // GET: Reservations
         public ActionResult Index()
         {
-            return View();
+            List<Reservation> reservations;
+
+            using (HttpClient httpClient = new HttpClient())
+            {
+                Task<String> response = httpClient.GetStringAsync(reservationUri);
+                reservations = JsonConvert.DeserializeObject<List<Reservation>>(response.Result);
+            }
+
+            return View(reservations);
         }
 
         [HttpPost]
@@ -31,7 +39,7 @@ namespace BerretDecailletBookingGUI.Controllers
             rvm.Reservation = new Reservation();
 
             rvm.Reservation.CheckIn = rooms.ElementAt(0).CheckIn;
-            rvm.Reservation.CheckIn = rooms.ElementAt(0).CheckOut;
+            rvm.Reservation.CheckOut = rooms.ElementAt(0).CheckOut;
 
             foreach (RoomSelectedVM rsvm in rooms.Where(r => r.IsSelected == true))
             {
@@ -54,7 +62,7 @@ namespace BerretDecailletBookingGUI.Controllers
                     rvm.Reservation.Rooms.Add(JsonConvert.DeserializeObject<Room>(response.Result));
                 }                
             }
-
+            
             // Send the reservation to the system
             using (HttpClient httpClient = new HttpClient())
             {
@@ -67,7 +75,50 @@ namespace BerretDecailletBookingGUI.Controllers
                 }
             }
 
-            return View();
+            List<Reservation> reservations;
+            using (HttpClient httpClient = new HttpClient())
+            {
+                Task<String> response = httpClient.GetStringAsync(reservationUri);
+                reservations = JsonConvert.DeserializeObject<List<Reservation>>(response.Result);
+            }
+            Reservation reserv = reservations.ElementAt(0);
+            foreach (Reservation res in reservations)
+            {
+                if (res.IdReservation > reserv.IdReservation)
+                    reserv = res;
+            }
+            return RedirectToAction("Details", new { id = reserv.IdReservation });
+        }
+
+        public ActionResult Details(int id)
+        {
+            Reservation reservation;
+
+            using (HttpClient httpClient = new HttpClient())
+            {
+                Task<String> response = httpClient.GetStringAsync(reservationUri + id);
+                reservation = JsonConvert.DeserializeObject<Reservation>(response.Result);
+            }
+
+            return View(reservation);
+        }
+
+
+        public ActionResult Delete(int id)
+        {
+
+            // Send the reservation delete to the system
+            using (HttpClient httpClient = new HttpClient())
+            {
+
+                Task<HttpResponseMessage> response = httpClient.DeleteAsync(reservationUri + id);
+            if (response.Result.IsSuccessStatusCode)
+            {
+                //
+            }
+        }
+
+            return RedirectToAction("Index", "Home");
         }
     }
 }
