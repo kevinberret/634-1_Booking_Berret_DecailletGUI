@@ -4,20 +4,17 @@
     ViewBag.Title = "Details";
 }
 
-<h2>Details</h2>
+<h2>Your reservation was successful!</h2>
     
 <div>
-    <h4>Reservation</h4>
+    <h4>Reservation n°@Html.DisplayFor(model => model.IdReservation) 
+        <div class="chip red">
+            Please note this number to cancel the reservation
+            <i class="close material-icons">close</i>
+        </div>
+    </h4>
     <hr />
     <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.IdReservation)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.IdReservation)
-        </dd>
-
         <dt>
             @Html.DisplayNameFor(model => model.Fisrtname)
         </dt>
@@ -51,7 +48,7 @@
         </dd>
 
     </dl>
-
+    <h4>Your rooms</h4>
     <table>
         <tr>
             <th>Number</th>
@@ -70,6 +67,5 @@
     </table>
 </div>
 <p>
-    @Html.ActionLink("Back to Home", "Index", "Home") ||
-    @Html.ActionLink("Delete", "Delete", new { id = Model.IdReservation })
+    @Html.ActionLink("Back to Home", "Index", "Home")
 </p>

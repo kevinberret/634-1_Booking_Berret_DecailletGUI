@@ -1,7 +1,8 @@
-﻿
+﻿@model BerretDecailletBookingGUI.ViewModel.SearchVM
+
 @{
     ViewBag.Title = "Index";
-    
+
 }
 
 @section topBackgroundImage{
@@ -25,7 +26,7 @@
                                 <div class="input-field col s12">
                                     <select required class="form-control" id="Location" name="Location">
                                         <option disabled selected value="">Location</option>
-                                        @foreach (String location in Model)
+                                        @foreach (String location in Model.Locations)
                                         {
                                             <option value="@location">@location</option>
                                         }
@@ -39,9 +40,6 @@
                                 Search
                                 <i class="material-icons right">search</i>
                             </button>
-                            <p>
-                                <a class="white-text" href="@Url.Action("Search","Home")"><i class="tiny material-icons">settings</i> Advanced search</a>
-                            </p>
                         </div>
                     }
                 </div>
@@ -52,6 +50,28 @@
     </div>
 }
 
+@if (TempData["Success"] != null)
+{
+    <div class="row">
+        <div class="col s12">
+            <div class="chip green darken-1">
+                @TempData["Success"]
+            </div>
+        </div>
+    </div>
+}
+
+@if (TempData["Error"] != null)
+            {
+    <div class="row">
+        <div class="col s12">
+            <div class="chip deep-orange darken-1">
+                @TempData["Error"]
+            </div>
+        </div>
+    </div>
+
+}
 
 
 
@@ -71,7 +91,7 @@
                 closeOnSelect: false // Close upon selecting a date,
             });
 
-            // snippet found https://github.com/amsul/pickadate.js/issues/690 
+            // snippet found https://github.com/amsul/pickadate.js/issues/690
             // to update automatically when datepicker is modified
             $('.datepicker').on('change', function () {
                 if ($(this).attr('id') === 'CheckIn') {
@@ -83,5 +103,5 @@
             });
         });
     </script>
-    
-    }
+
+}

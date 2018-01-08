@@ -13,13 +13,26 @@
     string parkingTooltip = "";
     string wifiColorIcon = "";
     string wifiTooltip = "";
+    string wifiIcon = "";
     int roomPos = 0;
 }
 
+<h3>Search result</h3>
+@if (TempData["Error"] != null)
+            {
+    <div class="row">
+        <div class="col s12">
+            <div class="chip deep-orange darken-1">
+                @TempData["Error"]
+            </div>
+        </div>
+    </div>
+
+}
 @using (Html.BeginForm("Create", "Reservations", FormMethod.Post))
 {
     <div class="fixed-action-btn">
-        <button class="btn-floating btn-large waves-effect waves-light red" type="submit"><i class="material-icons">send</i></button>
+        <button class="btn-floating btn-large waves-effect waves-light red tooltipped" data-position="top" data-delay="50" data-tooltip="Make reservation" type="submit"><i class="material-icons">send</i></button>
     </div>
 
     var i = 0;
@@ -36,6 +49,11 @@
         tvTooltip = HasTV ? "Has TV" : "No TV";
         hairdryerColorIcon = HasHairdryer ? "text-darken-3" : "text-lighten-2";
         hairdryerTooltip = HasHairdryer ? "Has hairdryer" : "No hairdryer";
+        wifiColorIcon = HasWifi ? "text-darken-3" : "text-lighten-2";
+        wifiIcon = HasWifi ? "signal_wifi_4_bar" : "signal_wifi_off"; 
+        wifiTooltip = HasWifi ? "Has WiFi" : "No WiFi";
+        parkingColorIcon = HasParking ? "text-darken-3" : "text-lighten-2";
+        parkingTooltip = HasParking ? "Has parking" : "No parking";
 
         if (i % 3 == 0)
         {
@@ -71,6 +89,14 @@
                         </div>
                         <div class="col s4">
                             <p class="center-align"><i class="tiny material-icons grey-text @Html.Raw(hairdryerColorIcon) tooltipped" data-position="top" data-delay="50" data-tooltip="@Html.Raw(hairdryerTooltip)">local_offer</i></p>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col s4">
+                            <p class="center-align"><i class="tiny material-icons grey-text @Html.Raw(parkingColorIcon) tooltipped" data-position="top" data-delay="50" data-tooltip="@Html.Raw(parkingTooltip)">local_parking</i></p>
+                        </div>
+                        <div class="col s4">
+                            <p class="center-align"><i class="tiny material-icons grey-text @Html.Raw(wifiColorIcon) tooltipped" data-position="top" data-delay="50" data-tooltip="@Html.Raw(wifiTooltip)">@wifiIcon</i></p>
                         </div>
                     </div>
                     <p class="center-align"><i class="material-icons grey-text text-darken-3">attach_money</i> @Html.DisplayFor(m => m[i].Room.Price) CHF</p>

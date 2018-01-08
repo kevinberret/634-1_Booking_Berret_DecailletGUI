@@ -17,23 +17,14 @@ namespace BerretDecailletBookingGUI.Controllers
         private readonly string reservationUri = "http://localhost:62837/api/Reservations/";
         private readonly string roomUri = "http://localhost:62837/api/Rooms/";
 
-        // GET: Reservations
-        public ActionResult Index()
-        {
-            List<Reservation> reservations;
-
-            using (HttpClient httpClient = new HttpClient())
-            {
-                Task<String> response = httpClient.GetStringAsync(reservationUri);
-                reservations = JsonConvert.DeserializeObject<List<Reservation>>(response.Result);
-            }
-
-            return View(reservations);
-        }
-
+        /*
+         * This method allows to create a reservation according to a list of selected rooms 
+         * object, which contains checkin and checkout dates
+         */
         [HttpPost]
         public ActionResult Create(IEnumerable<RoomSelectedVM> rooms)
         {
+            // Create reservationvm object for reservation
             ReservationVM rvm = new ReservationVM();
             rvm.Rooms = new List<Room>();
             rvm.Reservation = new Reservation();
@@ -41,28 +32,34 @@ namespace BerretDecailletBookingGUI.Controllers
             rvm.Reservation.CheckIn = rooms.ElementAt(0).CheckIn;
             rvm.Reservation.CheckOut = rooms.ElementAt(0).CheckOut;
 
+            // get only selected rooms
             foreach (RoomSelectedVM rsvm in rooms.Where(r => r.IsSelected == true))
             {
-                rvm.Rooms.Add(new Room() { IdRoom = rsvm.Room.IdRoom });              
+                rvm.Rooms.Add(new Room() { IdRoom = rsvm.Room.IdRoom });
             }
-            
+
             return View(rvm);
         }
 
+        /*
+         * This method allows te make a reservation according to a reservationvm object,
+         * which contains reservation object
+         */
         [HttpPost]
-        public ActionResult Reserve(ReservationVM rvm) {
+        public ActionResult Reserve(ReservationVM rvm)
+        {
             // Get the rooms selected for the reservation
             rvm.Reservation.Rooms = new List<Room>();
 
-            foreach(Room r in rvm.Rooms)
+            foreach (Room r in rvm.Rooms)
             {
                 using (HttpClient httpClient = new HttpClient())
                 {
-                    Task<String> response = httpClient.GetStringAsync(roomUri+r.IdRoom);
+                    Task<String> response = httpClient.GetStringAsync(roomUri + r.IdRoom);
                     rvm.Reservation.Rooms.Add(JsonConvert.DeserializeObject<Room>(response.Result));
-                }                
+                }
             }
-            
+
             // Send the reservation to the system
             using (HttpClient httpClient = new HttpClient())
             {
@@ -75,6 +72,9 @@ namespace BerretDecailletBookingGUI.Controllers
                 }
             }
 
+            /*
+             * Get all reservations and get last one
+             */
             List<Reservation> reservations;
             using (HttpClient httpClient = new HttpClient())
             {
@@ -87,11 +87,17 @@ namespace BerretDecailletBookingGUI.Controllers
                 if (res.IdReservation > reserv.IdReservation)
                     reserv = res;
             }
+
+            // Redirect to reservation details
             return RedirectToAction("Details", new { id = reserv.IdReservation });
         }
 
+        /*
+         * This method allows to display a reservation and its details
+         */
         public ActionResult Details(int id)
         {
+            // Get reservation
             Reservation reservation;
 
             using (HttpClient httpClient = new HttpClient())
@@ -103,20 +109,53 @@ namespace BerretDecailletBookingGUI.Controllers
             return View(reservation);
         }
 
-
-        public ActionResult Delete(int id)
+        /*
+         * This method allows the user to delete a specific reservation with its informations
+         */
+        public ActionResult Delete()
         {
+            return View(new Reservation());
+        }
 
-            // Send the reservation delete to the system
+        /*
+         * This method get a reservation object and check if it matches one in the database
+         * If it does => send delete command
+         * If it does not => send message error
+         */
+        [HttpPost]
+        public ActionResult Delete(Reservation reservation)
+        {
+            Reservation tmp;
+
+            // Get reservation to see if it matches
             using (HttpClient httpClient = new HttpClient())
             {
+                Task<String> response = httpClient.GetStringAsync(reservationUri + reservation.IdReservation);
+                try
+                {
+                    tmp = JsonConvert.DeserializeObject<Reservation>(response.Result);
+                }
+                catch (Exception e)
+                {
+                    tmp = null;
+                    TempData["Error"] = "Incorrect reservation number";
+                }
 
-                Task<HttpResponseMessage> response = httpClient.DeleteAsync(reservationUri + id);
-            if (response.Result.IsSuccessStatusCode)
-            {
-                //
             }
-        }
+
+            // If data set by user match data on server, send the reservation delete to the system
+            if (tmp != null && tmp.Fisrtname.Equals(reservation.Fisrtname) && tmp.Lastname.Equals(reservation.Lastname))
+            {
+                using (HttpClient httpClient = new HttpClient())
+                {
+                    Task<HttpResponseMessage> response = httpClient.DeleteAsync(reservationUri + reservation.IdReservation);
+                    TempData["Success"] = "Reservation deleted";
+                }
+            }
+            else if (TempData["Error"] == null)
+            {
+                TempData["Error"] = "Incorrect reservation informations";
+            }
 
             return RedirectToAction("Index", "Home");
         }

@@ -43,6 +43,7 @@
     top:120%;
 }
 
+/* Modified colors for image navigation in room list view */
 .slider .indicators .indicator-item.active {
     background-color: #00695c;
 }

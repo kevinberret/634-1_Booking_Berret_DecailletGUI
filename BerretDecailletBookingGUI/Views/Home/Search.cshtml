@@ -16,23 +16,27 @@
                         @Html.LabelFor(m => m.Name)
                     </div>
                 </div>
+                <p>
+                    <label for="checkin">Check-in</label>
+                    @Html.Editor("CheckIn", new { htmlAttributes = new { @class = "datepicker" } })
+                </p>
+                        
                 <div class="row">
-                    <div class="col s12 input-field">
-                        <label for="checkin">Check-in</label>
-                        @Html.TextBoxFor(m => m.CheckIn, new { @class = "datepicker" })
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col s12 input-field">
+                    <div class="col s12">
                         <label for="checkout">Check-out</label>
-                        @Html.TextBoxFor(m => m.CheckOut, new { @class = "datepicker" })
+                        @Html.Editor("CheckOut", new { htmlAttributes = new { @class = "datepicker" } })
                     </div>
                 </div>
                 <div class="row">
                     <div class="col s12 input-field">
-                        @Html.DropDownListFor(m => m.Location,
-                                new SelectList(Model.Locations.AsEnumerable()))
-                        @Html.LabelFor(m => m.Location, new { htmlAttributes = new { @class = "white-text" } })
+                        <select required class="form-control" id="Location" name="Location">
+                            <option disabled selected value="">Location</option>
+                            @foreach (String location in Model.Locations)
+                            {
+                                <option value="@location">@location</option>
+                            }
+                        </select>
+
                     </div>
                 </div>
             </div>
@@ -42,7 +46,7 @@
                     <div class="col s12">
                         <p>Type of room</p>
                         <p>
-                            <input name="RoomType" value="1" type="radio" id="single" />
+                            <input name="RoomType" value="1" type="radio" id="single" checked/>
                             <label for="single">Single</label>
                         </p>
                         <p>
@@ -81,7 +85,7 @@
                         <p>Price range</p>
                         <div id="price-slider"></div>
                         @Html.HiddenFor(m => m.PriceMin)
-                        @Html.HiddenFor(m => m.PriceMax)
+                        @Html.HiddenFor(m => m.PriceMax, new { @value = 3000})
                     </div>
                 </div>
             </div>
@@ -140,7 +144,7 @@
                 orientation: 'horizontal', // 'horizontal' or 'vertical'
                 range: {
                     'min': 0,
-                    'max': 3000
+                    'max': @Html.Raw(Model.PriceMax)
                 }
             });
 

@@ -18,6 +18,14 @@ namespace BerretDecailletBookingGUI.ViewModel
         public decimal PriceMin { get; set; }
         public decimal PriceMax { get; set; }
 
+        public AdvancedSearchVM()
+        {
+            PriceMax = 3000;
+            PriceMin = 0;
+            CheckIn = DateTime.Today;
+            CheckOut = CheckIn.Add(new TimeSpan(1, 0, 0, 0));
+        }
+
         public String ToString() {
             string parameters = "advanced?";
 

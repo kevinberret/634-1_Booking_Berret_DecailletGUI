@@ -14,20 +14,9 @@ namespace BerretDecailletBookingGUI.Controllers
     {
         private readonly string baseUri = "http://localhost:62837/api/Hotels/";
 
-        // GET: Hotels
-        public ActionResult Index()
-        {
-            List<Hotel> hotels;
-
-            using (HttpClient httpClient = new HttpClient())
-            {
-                Task<String> response = httpClient.GetStringAsync(baseUri);
-                hotels = JsonConvert.DeserializeObject<List<Hotel>>(response.Result);
-            }            
-
-            return View(hotels);
-        }
-
+        /*
+         * This method allows to display details of an hotel
+         */
         public ActionResult Details(int id) {
             Hotel hotel;
 

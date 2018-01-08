@@ -18,8 +18,10 @@ namespace BerretDecailletBookingGUI.Controllers
         // Home page with basic search function
         public ActionResult Index()
         {
+            SearchVM svm = new SearchVM();
+            svm.Locations = getLocations();
 
-            return View(getLocations());
+            return View(svm);
         }
 
         // Advanced search
@@ -31,6 +33,9 @@ namespace BerretDecailletBookingGUI.Controllers
             return View(asvm);
         }
 
+        /*
+         * This method get all locations available in database
+         */ 
         private List<String> getLocations()
         {
             List<Hotel> hotels;
