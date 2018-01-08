@@ -39,33 +39,3 @@
             <i class="material-icons right">send</i>
         </button>
 }
-@section scripts{
-    <script>
-        $(document).ready(function () {
-            $('select').material_select();
-
-            $('.datepicker').pickadate({
-                today: 'Today',
-                clear: 'Clear',
-                close: 'Ok',
-                closeOnSelect: false // Close upon selecting a date,
-            });
-
-            // snippet found https://github.com/amsul/pickadate.js/issues/690
-            // to update automatically when datepicker is modified
-            $('.datepicker').on('change', function () {
-                if ($(this).attr('id') === @Html.IdFor(model => model.Reservation.CheckIn)) {
-                    $('#CheckOut').pickadate('picker').set('min', $(this).val());
-                }
-                if ($(this).attr('id') === @Html.IdFor(model => model.Reservation.CheckOut)) {
-                    $('#CheckIn').pickadate('picker').set('max', $(this).val());
-                }
-            });
-
-            $('.datepicker').on('close', function () {
-                this.$holder.blur();
-            });
-        });
-    </script>
-
-}
